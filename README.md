@@ -2,126 +2,137 @@
 
 # 🤖 Machine Learning Project: Clustering & Ensemble Analysis
 
-## 📌 Author
+## 👤 Author
 **Rutvik Shah**
 
 ---
 
-## 🧠 Project Overview
+## 📌 Overview
 
-This project presents a comprehensive machine learning analysis using **clustering algorithms**, **dimensionality reduction techniques**, and **ensemble models**. The goal was to evaluate the effects of dimensionality reduction on clustering quality and predictive performance using two real-world datasets.
+This project investigates the effect of **dimensionality reduction** on clustering and classification performance using two real-world datasets. It integrates:
+
+- **Clustering algorithms**: KMeans, Agglomerative
+- **Dimensionality reduction**: PCA, UMAP
+- **Ensemble classifiers**: AdaBoost, Random Forest
 
 ---
 
 ## 📁 Datasets
 
-### 1. Body Performance Dataset
-- 📍 [Link](https://www.kaggle.com/datasets/kukuroo3/body-performance-data)
-- **Participants:** 13,394
-- **Attributes:** Age, gender, height, weight, blood pressure, body fat %, grip strength, flexibility, core strength, and leg power.
-- **Target:** Performance class (A–D)
+### 1. Body Performance
+🔗 [Dataset Link](https://www.kaggle.com/datasets/kukuroo3/body-performance-data)
 
-### 2. White Wine Quality Dataset
-- 📍 [Link](https://www.kaggle.com/datasets/piyushagni5/white-wine-quality)
-- **Observations:** 4,898
-- **Features:** Alcohol, sugar, acidity, pH, sulfates, etc.
-- **Target:** Quality score (0–10)
+- 13,394 participants
+- 12 attributes (e.g., age, gender, weight, blood pressure, flexibility, strength)
+- Target: Performance Class (A–D)
 
----
+### 2. White Wine Quality  
+🔗 [Dataset Link](https://www.kaggle.com/datasets/piyushagni5/white-wine-quality)
 
-## 🔍 Exploratory Data Analysis & Preprocessing
-
-### Common Steps
-- Removed duplicates
-- Encoded categorical features
-- Normalized data using `RobustScaler`
-- Random 10% sampling for performance optimization
-
-### White Wine Dataset Specific
-- Transformed quality into binary class (good vs not good)
-- Correlation matrix visualized via heatmap
+- 4,898 samples
+- 12 physicochemical features
+- Target: Wine Quality (0–10 → Binarized)
 
 ---
 
-## 🔄 Dimensionality Reduction Techniques
+## 🔍 Preprocessing Summary
 
-### 🔷 PCA (Principal Component Analysis)
-- Scikit-learn implementation
-- Variance explained via elbow plot
-- Retained 2–3 principal components
+### Shared Steps:
+- Duplicate removal
+- Categorical encoding (e.g., gender → binary)
+- 10% random sampling for efficiency
+- Feature scaling via `RobustScaler`
 
-### 🔶 UMAP (Uniform Manifold Approximation and Projection)
-- Applied on both training and test sets
-- Effective 2D visualization of complex relationships
-
----
-
-## 📊 Clustering Methods
-
-### ✅ KMeans
-- Body Dataset: Optimal clusters = 3 (original), 2 (PCA), 3 (UMAP)
-- Wine Dataset: Optimal clusters = 3 (all cases)
-
-### ✅ Agglomerative Clustering
-- Body Dataset: 2 (original), 3 (PCA), 3 (UMAP)
-- Wine Dataset: 3 (original & PCA), 4 (UMAP)
-
-### 📌 Insight:
-UMAP generally preserved cluster structure better, especially in the wine dataset.
+### Specific to Wine Dataset:
+- Quality transformed into binary class (good/bad)
+- Heatmap used for feature correlation visualization
 
 ---
 
-## 🌲 Ensemble Modeling
+## 🔄 Dimensionality Reduction
 
-### ✅ AdaBoost
-- Tuned using `GridSearchCV`
-- Best parameters: `n_estimators=100`, `learning_rate=0.1`
-- Accuracy (Wine): ~66%–68%
+### PCA (Principal Component Analysis)
+- Scaled input before PCA
+- Used elbow plots to determine component count
 
-### ✅ Random Forest
-- Tuned using `GridSearchCV`
-- Best parameters: `n_estimators=100`, `max_depth=None`, `min_samples_split=10`
-- Accuracy (Wine): Up to **71.43%**
+### UMAP (Uniform Manifold Approximation & Projection)
+- Visualizes similar data closer in low-dimensional space
 
 ---
 
-## 📈 Results Summary
+## 📊 Clustering Results
 
-| Dataset          | Model        | Accuracy | Precision | Recall | F1 Score |
-|------------------|--------------|----------|-----------|--------|----------|
-| Body (Original)  | RF           | 61%      | 0.60      | 0.61   | 0.60     |
-| Body (PCA)       | RF           | 57%      | 0.57      | 0.57   | 0.55     |
-| Body (UMAP)      | RF           | 45%      | 0.45      | 0.45   | 0.44     |
-| Wine (Original)  | RF           | 67%      | 0.66      | 0.67   | 0.66     |
-| Wine (PCA)       | RF           | **74%**  | 0.73      | 0.74   | 0.72     |
-| Wine (UMAP)      | RF           | 69%      | 0.68      | 0.69   | 0.68     |
+### Best Number of Clusters
+
+| Dataset | Method      | Original | PCA | UMAP |
+|---------|-------------|----------|-----|------|
+| Body    | KMeans      | 3        | 2   | 3    |
+| Body    | Agglomerative | 2      | 3   | 3    |
+| Wine    | KMeans      | 3        | 3   | 3    |
+| Wine    | Agglomerative | 3      | 3   | 4    |
 
 ---
 
-## 🔍 Key Takeaways
+## 🌲 Ensemble Models & Performance
 
-- **Random Forest consistently outperformed AdaBoost**, especially on PCA-transformed data.
-- **UMAP** revealed hidden cluster structures in wine quality data not visible through PCA.
-- **Dimensionality reduction (PCA/UMAP)** helped visualize data and slightly improved performance in some cases.
-- **Clustering quality varied by method and dataset**, with Agglomerative Clustering showing robustness.
+### 🔶 Body Performance Dataset
+
+| Transformation | Model        | Accuracy | Precision | Recall | F1 Score |
+|----------------|--------------|----------|-----------|--------|----------|
+| Original       | AdaBoost     | 54%      | 0.56      | 0.54   | 0.53     |
+| Original       | Random Forest| **61%**  | 0.60      | 0.61   | 0.60     |
+| PCA            | AdaBoost     | 56%      | 0.57      | 0.56   | 0.56     |
+| PCA            | Random Forest| 57%      | 0.57      | 0.57   | 0.55     |
+| UMAP           | AdaBoost     | 45%      | 0.48      | 0.45   | 0.43     |
+| UMAP           | Random Forest| 45%      | 0.45      | 0.45   | 0.44     |
+
+### 🔷 White Wine Quality Dataset
+
+| Transformation | Model        | Accuracy | Precision | Recall | F1 Score |
+|----------------|--------------|----------|-----------|--------|----------|
+| Original       | AdaBoost     | **68%**  | 0.67      | 0.68   | 0.65     |
+| Original       | Random Forest| 67%      | 0.66      | 0.67   | 0.66     |
+| PCA            | AdaBoost     | 63%      | 0.61      | 0.63   | 0.61     |
+| PCA            | Random Forest| **74%**  | 0.73      | 0.74   | 0.72     |
+| UMAP           | AdaBoost     | 67%      | 0.66      | 0.67   | 0.66     |
+| UMAP           | Random Forest| 69%      | 0.68      | 0.69   | 0.68     |
+
+---
+
+## ⚙️ Hyperparameter Tuning
+
+### AdaBoost
+- Best Parameters:
+  - `n_estimators`: 50 or 100
+  - `learning_rate`: 0.1 or 1.0
+- Tuned with `GridSearchCV`
+
+### Random Forest
+- Best Parameters:
+  - `n_estimators`: 100
+  - `max_depth`: None or 20
+  - `min_samples_split`: 2 or 10
+  - `min_samples_leaf`: 1
+
+---
+
+## ✅ Conclusions
+
+- **Random Forest outperforms AdaBoost** overall in most scenarios.
+- **PCA** often improves model performance slightly.
+- **UMAP** is excellent for visualizing clusters but sometimes hurts model accuracy.
+- **AdaBoost performs best on original white wine data** (68%).
+- **Random Forest on PCA-transformed wine data** yields the highest overall accuracy (74%).
 
 ---
 
 ## 📚 References
 
-- [Body Performance Data](https://www.kaggle.com/datasets/kukuroo3/body-performance-data)
-- [White Wine Quality Data](https://www.kaggle.com/datasets/piyushagni5/white-wine-quality)
+- [Body Performance Dataset](https://www.kaggle.com/datasets/kukuroo3/body-performance-data)  
+- [White Wine Quality Dataset](https://www.kaggle.com/datasets/piyushagni5/white-wine-quality)  
+- [Scikit-learn Docs](https://scikit-learn.org/stable/)  
 - [KMeans - W3Schools](https://www.w3schools.com/python/python_ml_k-means.asp)
-- [Agglomerative Clustering - Scikit-Learn](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.AgglomerativeClustering.html)
 
 ---
 
-## ✅ Future Work
-
-- Explore other dimensionality reduction techniques like t-SNE.
-- Try other ensemble methods: Gradient Boosting, XGBoost.
-- Perform feature importance and interpretability analysis.
-
----
-
-> 📌 *This project demonstrates the synergy between dimensionality reduction and ensemble learning techniques for both classification and clustering tasks.*
+> 🧠 *This project blends unsupervised and supervised learning with data transformation techniques to evaluate both cluster structures and classification models.*
